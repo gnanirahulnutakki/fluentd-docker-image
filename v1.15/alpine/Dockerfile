@@ -25,7 +25,13 @@ RUN apk update \
  && gem install fluentd -v 1.15.3 \
  && gem install bigdecimal -v 1.4.4 \
  && apk del .build-deps \
+ && gem install fluent-plugin-elasticsearch \
+ && gem install fluent-plugin-grok-parser \
  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem /usr/lib/ruby/gems/3.*/gems/fluentd-*/test
+
+# Issue with elasticsearch plugin https://github.com/uken/fluent-plugin-elasticsearch/issues/944
+RUN gem uninstall -I elasticsearch \
+&& gem install elasticsearch -v 7.17.0
 
 RUN addgroup -S fluent && adduser -S -G fluent fluent \
     # for log storage (maybe shared with host)
